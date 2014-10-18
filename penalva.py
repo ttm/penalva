@@ -1,7 +1,7 @@
 #-*- coding: utf-8 -*-
-import numpy as n, random, os, sys
+import numpy as n, random, os, sys, time
 from scipy.io import wavfile as w
-
+tfoo=time.time()
 H=n.hstack
 V=n.vstack
 
@@ -86,14 +86,14 @@ def ac(f=200.,notas=[0.,4.,7.,12.],tab=Q_i,d=2.,nu=0,fv=2.):
     for na in notas[:-1]:
         acorde+=adsr(v(tab=tab,d=d,f=f*2**(na/12.),nu=nu,fv=fv))
     
-    return acorde
+    return acorde*10
 
 to=ac(200,[0,4,7])
 ms=ac(200,[3,7,10])
 ms2=ac(200,[4,8,11])
 mi=ac(200,[0,3,8])
 mi2=ac(200,[1,4,9])
-print("ok 1")
+print("ok 1 - %.2f"%(time.time()-tfoo,)); tfoo=time.time()
 
 #frase="semicondutor livre"
 #arq=frase.split()[0]
@@ -113,7 +113,7 @@ def fala(frase="Semicondutor livre"):
     ff_=n.fft.fft(ff)
     s=ff2=n.fft.ifft( n.hstack((ff_,n.zeros(len(ff_)) ))  ).real
     sc_aud=((s-s.min())/(s.max()-s.min()))*2.-1.
-    return sc_aud
+    return sc_aud*10
 
 mano=fala("maaaannnnnnoooooooo")
 mano2=fala("mannnnnooooooooooooooooooooooooooooo")
@@ -187,7 +187,7 @@ linha[TT:TT+len(som)]+=som
 TT=21*f_a; som=fala("eh o laaaaaab maaaaaacambira a a a aa a")
 linha[TT:TT+len(som)]+=som
 
-# Compasso 7: as 3 linhas voltam, fazem certo furduncio
+# COMPASSO 7: as 3 linhas voltam, fazem certo furduncio
 pb=[(0,1,4.,1.),(7,1,4.,2.),
     (0,1,104.,2.),(7,.75,8.,2.),(7,.25,8.,16.)]
 lb=H([v(f=fb*2**(i[0]/12.),d=i[1],fv=i[2],nu=i[3],tab=D_i) for i in pb])
@@ -197,6 +197,7 @@ pm=[(0,.5,3.,3.),(-1,.5,0,0),(4,.5,2.,2.),(-7,.5,0,0),
     (0,.5,1.,1.),(11,.5,0,0),(12,.5,104.,2.),(2,.5,0,0)]
 lm=H([v(f=fm*2**(i[0]/12.),d=i[1],fv=15.,nu=.5,tab=Tr_i) for i in pm])
 
+print("ok 2 - %.2f"%(time.time()-tfoo,)); tfoo=time.time()
 fa=2000
 pa=[(0,3,1,4),(2,1,10,4)]
 ab=H([v(f=fa*2**(i[0]/12.),d=i[1],nu=i[3],fv=i[2],tab=S_i) for i in pa])
@@ -208,7 +209,7 @@ linha[TT:TT+len(som)]+=som
 TT=6*(4*f_a); som=la
 linha[TT:TT+len(som)]+=som
 
-# Compasso 8: dev
+# COMPASSO 8: dev
 
 pb=[(0,1,4.,1.),(7,1,4.,2.),
     (0,1,104.,2.),(7,.75,8.,2.),(7,.25,8.,16.)]
@@ -230,7 +231,7 @@ linha[TT:TT+len(som)]+=som
 TT=7*(4*f_a); som=la
 linha[TT:TT+len(som)]+=som
 
-# Compasso 9: encadeamentos harmonicos
+# COMPASSO 9: encadeamentos harmonicos
 
 to=ac(100,[0,4,7,12],tab=S_i)
 sr=ac(100,[2,5,9,14],tab=S_i)
@@ -261,7 +262,9 @@ linha[TT:TT+len(som)]+=som
 TT=8*(4*f_a); som=la
 linha[TT:TT+len(som)]+=som
 
-# Compasso 10, dominante
+TT=8*(4*f_a); som=fala("mu u u u ui i i itoo o o o ma a a assa maa a a aa a nnnnnooooo")
+linha[TT:TT+len(som)]+=som
+# COMPASSO 10, dominante
 d7=ac(100,[2,5,7,11],tab=S_i)
 
 d7_=ac(100,[2,5,7,11,-1,-5,14,19],tab=S_i)
@@ -290,13 +293,16 @@ TT=9*(4*f_a); som=lm
 linha[TT:TT+len(som)]+=som
 TT=9*(4*f_a); som=la
 linha[TT:TT+len(som)]+=som
+TT=int(9.5*(4*f_a)); som=fala("mu u u u ui i i itoo o o o ma a a assa maa a a aa a nnnnnooooo")
+linha[TT:TT+len(som)]+=som
 
-# Compasso 11, volta p tônica e modula para a dominante
+# COMPASSO 11, volta p tônica e modula para a dominante
 
 to=ac(100,[0,4,7,12],tab=Tr_i,d=1.)
 sr=ac(100,[2,5,9,14],tab=Tr_i,nu=.2,d=1.)
 do=ac(100,[2,-1,7,11],tab=Tr_i,d=1.)
 d_do=ac(100,[2,6,9,12],tab=S_i,nu=.2,d=1.)
+print("ok 3 - %.2f"%(time.time()-tfoo,)); tfoo=time.time()
 
 TT=10*(4*f_a); som=to
 linha[TT:TT+len(som)]+=som
@@ -313,8 +319,11 @@ la=H([v(f=fa*2**(i[0]/12.),d=i[1],nu=i[3],fv=i[2],tab=S_i) for i in pa])
 
 TT=10*(4*f_a); som=la
 linha[TT:TT+len(som)]+=som
+#TT=int(10.75*(4*f_a)); som=fala("python, javascripiti, peagahpe, dijango, bashhhhhshshshs, linuquis, a agah teee, aaaa aaaagggaaaa, teeee, freaaaaqueee, coooddddiiiinnnnguee, ehhheeeehhehe nnoiiiiissss maccaaaammbbiiiiiiiirrrraaaa  aaa  a a a a  a a a aaaaaaaaaaa  aaaaaaaa raaaaaaaataaaaaaaa taaaaaa raaaa tataata raraaraiaiaiaiaoaoaooaapapapaparararrawawawaagagaggafafafajajajaoaoabababadadacacaccaa")
+TT=int(10.75*(4*f_a)); som=fala("python, javascripiti, peagahpe, dijango, bashhhhhshshshs, linuquis, a agah teee, aaaa aaaagggaaaa, teeee, freaaaaqueee, coooddddiiiinnnnguee")
+linha[TT:TT+len(som)]+=som
 
-# Compasso 12: ápice, dominante e seu s espaço harmonico
+# COMPASSO 12: ápice, dominante e seu s espaço harmonico
 do=ac(100,[2,-1,7,11],tab=S_i,d=1.)
 s_do=ac(100,[-3,0,4,9],tab=S_i,d=1.)
 d_do=ac(100,[2,6,9,12],tab=S_i,nu=.2)
@@ -339,7 +348,7 @@ linha[TT:TT+len(som)]+=som
 TT=11*(4*f_a); som=lm
 linha[TT:TT+len(som)]+=som
 
-# Compasso 13
+# COMPASSO 13
 # dominante, dominante da dominante com setima
 # baixa meio tom, vira d7 sub
 do=ac(100,[2,-1,7,11],tab=S_i,d=1.)
@@ -356,7 +365,7 @@ linha[TT:TT+len(som)]+=som
 TT=12*(4*f_a)+3*f_a; som=d_sub
 linha[TT:TT+len(som)]+=som
 
-# Compasso 14, volta p tônica, sossega
+# COMPASSO 14, volta p tônica, sossega
 
 do=ac(100,[2,-1,7,11],  tab=Tr_i,d=1.)
 s_do=ac(100,[-3,0,4,9], tab=Tr_i,d=1.)
@@ -379,7 +388,7 @@ lm=H([v(f=fm*2**(i[0]/12.),d=i[1],fv=15.,nu=.5,tab=S_i) for i in pm])
 TT=13*(4*f_a); som=lm
 linha[TT:TT+len(som)]+=som
 
-# Compasso 15
+# COMPASSO 15
 # faz cadencia I-III-V-I p firmar tonica
 
 to=ac(100,[0,4,7,12],tab=Tr_i,d=1.)
@@ -393,7 +402,10 @@ linha[TT:TT+len(som)]+=som
 TT=14*(4*f_a)+2*f_a; som=d_sub
 linha[TT:TT+len(som)]+=som
 
-# Compasso 16: termina
+print("ok 4 - %.2f"%(time.time()-tfoo,)); tfoo=time.time()
+TT=int(14.25*(4*f_a)); som=fala("democracia direta, economia solidaria, autogestao coletiva, agora comuououououns, irmandade do codigooooo")
+linha[TT:TT+len(som)]+=som
+# COMPASSO 16: termina
 # firula no acorde de tonica
 # com falas ou outras coisas
 
@@ -403,7 +415,7 @@ d= v(f=fb*2**(7/12.),  d=1.,nu=0,fv=0,tab=S_i)
 t_=v(f=fb*2**(12/12.),d=1.,nu=0,fv=0,tab=S_i)
 
 
-t2= v(f=fb*2**(0/12.) ,d=1.,nu=2.,fv=2.,tab=D_i)
+t2= v(f=fb*2**(0/12.) ,d=1.,nu=2.,fv=2.,tab=S_i)
 tr2=v(f=fb*2**(4/12.),d=1.,nu=2.,fv=2.,tab=S_i)
 d2= v(f=fb*2**(7/12.) ,d=1.,nu=4,fv=4.,tab=S_i)
 
@@ -438,7 +450,9 @@ TT=15*(4*f_a)+3*f_a; som=tr2
 linha[TT:TT+len(som)]+=som
 TT=15*(4*f_a)+3*f_a; som=t_
 linha[TT:TT+len(som)]+=som
+linha=H((linha,v(f=fb*2**(0/12.),  d=4.,nu=0,fv=0,tab=S_i)+v(f=fb*2**(16/12.),  d=4.,nu=.2,fv=1,tab=S_i)+v(f=fb*2**(24/12.),  d=4.,nu=1.5,fv=6,tab=S_i)))
 
+print("ok 5 - %.2f"%(time.time()-tfoo,)); tfoo=time.time()
 s=linha
 s=((s-s.min())/(s.max()-s.min()))*2.-1.
 s = n.int16(s * float(2**15-1))
